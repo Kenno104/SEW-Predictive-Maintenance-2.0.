@@ -1,0 +1,6 @@
+﻿productID,type,department,status,issued,last_repair,no_repairs,time_since_last,repair_dates,customer,location,address,avg_reliability
+SEW-09,Helical gear unit  4-pole DR63 motor,gearmotors,0,14/02/2018,01/01/2023,5,25,16/08/2018,TRUMPF,DITZINGEN,"Johann-Maus-Str. 2, 71254 Ditzingen, Germany",356
+,,,,,,,,09/09/2021,,,,
+,,,,,,,,12/09/2021,,,,
+,,,,,,,,03/10/2022,,,,
+,,,,,,,,01/01/2023,,,,
