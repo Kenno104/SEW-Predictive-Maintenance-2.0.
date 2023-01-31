@@ -63,13 +63,22 @@ time_since = int(df['diffs'][len(df) - 1])
 col1, col2, col3 = st.columns(3)
 
 with col1:
-  st.header(df['type'][0])
-  st.text(df['productID'][0])
+  st.subheader(df['type'][0])
+  st.subheader(df['productID'][0])
+  
+  st.subheader(df['customer'][0])
+  st.text(df['address'][0])
 
 with col2:
-  st.header("Last Repair")
-  st.text(df['repair_dates'][len(df) - 1])
+  st.subheader("Last Repair")
+  st.subheader(df['repair_dates'][len(df) - 1])
 
+  st.subheader("Repairs To Date:")
+  st.subheader(len(df['repair_dates']))
+  
 with col3:
   st.subheader("Mean time between failures")
   st.subheader(avg_reliability)
+
+  st.subheader('Estimated Next Repair')
+  # st.subheader(df['repair_dates'][len(df) - 1] + avg_reliability)
