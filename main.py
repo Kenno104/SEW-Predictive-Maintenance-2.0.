@@ -64,21 +64,77 @@ col1, col2, col3 = st.columns(3)
 
 with col1:
   st.subheader(df['type'][0])
-  st.subheader(df['productID'][0])
-  
-  st.subheader(df['customer'][0])
-  st.text(df['address'][0])
+  st.text('Product ID: ' + df['productID'][0])
 
 with col2:
-  st.subheader("Last Repair")
-  st.subheader(df['repair_dates'][len(df) - 1])
-
-  st.subheader("Repairs To Date:")
-  st.subheader(len(df['repair_dates']))
+  st.subheader("Last Repair Date:")
+  st.text(df['repair_dates'][len(df) - 1])
   
 with col3:
-  st.subheader("Mean time between failures")
-  st.subheader(avg_reliability)
+  st.subheader("Mean time between failures:")
+  st.subheader(f":blue[{avg_reliability} Days]")
 
-  st.subheader('Estimated Next Repair')
-  # st.subheader(df['repair_dates'][len(df) - 1] + avg_reliability)
+col4, col5, col6 = st.columns(3)
+
+with col4:
+  st.subheader('Customer: ' + df['customer'][0])
+  st.text(df['address'][0])
+
+with col5:
+  st.subheader("No. Repairs To Date:")
+  st.subheader(len(df['repair_dates']))
+  
+with col6:
+  st.subheader('Estimated Next Repair Date:')
+  st.subheader(f":blue[{df['repair_dates'][len(df) - 1] + timedelta(days=avg_reliability)}]")
+
+#SECTION 2: Graph
+fig, ax = plt.subplots()
+for i in range(len(df) - 1):
+  start_date = df.iloc[i]['repair_dates']
+  end_date = df.iloc[i + 1]['repair_dates']
+  x = [start_date, end_date]
+  y = [0, (end_date - start_date).days]
+  ax.plot(x, y, '-b')
+  ax.vlines(end_date,
+            0, (end_date - start_date).days,
+            color='black',
+            linestyle='dotted',
+            alpha=0.4)
+
+# Draw the last line to today's date
+x = [df.iloc[-1]['repair_dates'], datetime_object]
+y = [0, (datetime_object - df.iloc[-1]['repair_dates']).days]
+ax.plot(x, y, '-b', label='Current lifetime')
+
+
+ax.axhline(y=avg_reliability,
+           color='orange',
+           linestyle='--',
+           label='Expected Lifetime',
+           linewidth=1)
+
+# Set the x-axis to display the dates
+# ax.set_xticks(df['dates'].append(pd.Series(now))) # deprecated expression
+ax.set_xticks(pd.concat([df['repair_dates'], pd.Series(datetime_object)]))
+ax.xaxis.set_major_formatter(
+  plt.FixedFormatter(df['repair_dates'].dt.strftime("%d-%m-%Y")))
+ax.xaxis.set_tick_params(rotation=45)
+
+plt.legend()
+st.pyplot(fig)
+
+#SECTION 3: Alerts & Actions
+
+col7, col8= st.columns(2)
+
+with col7:
+  st.header(':red[Live Alerts]')
+  st.subheader('Currently: All Systems :green[Green]')
+              
+with col8:
+  url ='https://www.seweurodrive.com/contact_us/contact_us.html'
+  
+  st.markdown(f'''<a href={url}><button style="background-color:Blue;">Schedule Maintenance Call</button></a>
+''',
+unsafe_allow_html=True)
